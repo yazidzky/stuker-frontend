@@ -30,7 +30,7 @@ export default function ProfilePage() {
   };
 
   const handleSwitch = () => {
-    router.push("/stuker-dashboard");
+    router.push("/dashboard");
   };
   // 🔹 Fungsi untuk menimpa (simpan perubahan)
   const handleOverride = () => {
@@ -86,14 +86,14 @@ export default function ProfilePage() {
         onChange={(v) => handleFieldChange("password", v)}
       />
       <div className="flex gap-x-2">
-        <div className="flex flex-2">
+        <div className="flex flex-4">
           <Button
-            label="Beralih ke Stuker"
+            label="Beralih ke Customer"
             className="text-md rounded-lg py-3"
             onClick={handleSwitch}
           />
         </div>
-        <div className="flex-3">
+        <div className="flex-5">
           <Button
             label="Simpan Perubahan"
             onClick={handleOverride}

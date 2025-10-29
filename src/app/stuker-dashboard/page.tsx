@@ -1,7 +1,7 @@
-import OrderCard from "./OrderCard";
-
-export default function HistoryPage() {
-  const orderHistory = [
+import Image from "next/image";
+import OrderCardStuker from "./OrderCardStuker";
+export default function StukerDashboard() {
+  const activeOrders = [
     {
       order_id: "001",
       stuker_nim: "1271129111",
@@ -69,7 +69,7 @@ export default function HistoryPage() {
       customer_nim: "81829916661",
       pickup_location: "Kantin Fakultas Tarbiyah",
       delivery_location: "Gedung FISIP, R 110",
-      order_description: "Nitip nasi goreng dan minumannya jus alpukat",
+      order_description: "Nitip nasi goreng dan minumannya jus alpukat ",
       price_estimation: 22000,
       delivery_fee: 5000,
       total_price_estimation: 27000,
@@ -78,11 +78,13 @@ export default function HistoryPage() {
       stuker_image: "/images/profilePhoto.png",
     },
   ];
-
   return (
-    <div className="pt-4 px-2 flex flex-col gap-y-2">
-      <h1 className="text-primary font-medium text-xl">Riwayat Pesanan</h1>
-      <OrderCard orderHistory={orderHistory} />
+    <div className="w-[100%] px-4 flex pt-8 flex-col">
+      <div className="flex mb-1 justify-end pr-1">
+        <h1>Pesanan Tersedia</h1>
+        <Image width={26} height={26} alt="List" src={"/icons/list-menu.svg"} />
+      </div>
+      <OrderCardStuker activeOrders={activeOrders} />
     </div>
   );
 }
