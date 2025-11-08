@@ -13,7 +13,7 @@ export default function PhotoProfileSection({
   imageUrl: string;
 }) {
   return (
-    <div className="flex justify-center mb-6">
+    <div className="flex justify-center mb-6 ">
       <div
         className="relative rounded-full flex justify-center self-center w-[100px]"
         onClick={handleClick}

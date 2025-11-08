@@ -1,4 +1,5 @@
-import OrderCard from "./OrderCard";
+import NoOrderMessage from "./NoOrderMessage";
+import OrderCard from "./OrderCardComponent";
 
 export default function HistoryPage() {
   const orderHistory = [
@@ -80,9 +81,14 @@ export default function HistoryPage() {
   ];
 
   return (
-    <div className="pt-4 px-2 flex flex-col gap-y-2">
+    <div className="pt-4 px-2 flex flex-col gap-y-2  pb-[11vh]">
       <h1 className="text-primary font-medium text-xl">Riwayat Pesanan</h1>
-      <OrderCard orderHistory={orderHistory} />
+
+      {orderHistory && orderHistory.length > 0 ? (
+        <OrderCard orderHistory={orderHistory} />
+      ) : (
+        <NoOrderMessage />
+      )}
     </div>
   );
 }

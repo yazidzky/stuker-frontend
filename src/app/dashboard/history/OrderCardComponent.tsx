@@ -15,7 +15,7 @@ interface OrderHistoryItem {
   stuker_name: string;
 }
 
-export default function OrderCard({
+export default function OrderCardComponent({
   orderHistory,
 }: {
   orderHistory: OrderHistoryItem[];

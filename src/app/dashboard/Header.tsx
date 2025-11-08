@@ -8,7 +8,7 @@ export default function Header({ imgUrl }: { imgUrl: string }) {
         alt="Logo"
         width={90}
         height={90}
-        className="w-14 h-14 rounded-full "
+        className="w-14 h-14 rounded-full"
       />
       <Image
         src={"/stuker-logo.svg"}

@@ -1,4 +1,9 @@
+"use client";
+
 import Image from "next/image";
+import { limitText } from "@/utils/function";
+
+// 💡 Tipe data untuk item pesanan
 interface OrderHistoryItem {
   order_id: string;
   stuker_nim: string;
@@ -10,66 +15,84 @@ interface OrderHistoryItem {
   delivery_fee: number;
   total_price_estimation: number;
   order_date: string;
-  status: string; // bisa pakai union type
+  status: string;
   stuker_image: string;
   stuker_name: string;
 }
 
+interface OrderCardStukerProps {
+  activeOrders: OrderHistoryItem[];
+  setOrderDetailVisibility: (value: boolean) => void;
+}
+
+// 💡 Utility konversi ke format Rupiah
+function toRupiah(number: number): string {
+  if (isNaN(number)) return "Input bukan angka";
+
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(number);
+}
+
+// =====================================================
+// 🔹 KOMPONEN UTAMA
+// =====================================================
 export default function OrderCardStuker({
   activeOrders,
-}: {
-  activeOrders: OrderHistoryItem[];
-}) {
-  function toRupiah(number: number) {
-    if (isNaN(number)) return "Input bukan angka";
-
-    // Gunakan Intl.NumberFormat untuk format IDR
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0, // hilangkan “,00”
-      maximumFractionDigits: 0,
-    }).format(number);
-  }
+  setOrderDetailVisibility,
+}: OrderCardStukerProps) {
   return (
-    <div className="flex flex-col gap-y-1">
+    <div className="flex flex-col gap-y-2">
       {activeOrders.map((order) => (
         <div
           key={order.order_id}
-          className="border border-gray-300 h-36 p-1 rounded-xl hover:bg-[#E1CCEC] hover:scale-101 cursor-pointer"
+          onClick={() => setOrderDetailVisibility(true)}
+          className="border border-gray-300 h-36 p-1 rounded-xl hover:scale-[1.01] cursor-pointer active:opacity-40 transition-all duration-200"
         >
-          <div className="bg-primary rounded-xl p-2 flex flex justify-between gap-y-1 px-3 ">
-            <div className="flex flex-col justify-center">
-              <div className="flex gap-x-2 items-center">
+          {/* 🔸 Bagian Atas: Lokasi & Estimasi Biaya */}
+          <div className="bg-primary rounded-xl p-2 flex justify-between items-center px-3">
+            <div className="flex flex-col justify-center gap-y-1">
+              {/* Lokasi Penjemputan */}
+              <div className="flex items-center gap-x-2">
                 <Image
-                  src={"/icons/pickup.svg"}
-                  width={24}
-                  height={24}
+                  src="/icons/pickup.svg"
+                  width={20}
+                  height={20}
                   alt="pickup"
                 />
                 <p className="text-white text-sm">{order.pickup_location}</p>
               </div>
-              <div className="flex gap-x-2 items-center">
+
+              {/* Lokasi Pengantaran */}
+              <div className="flex items-center gap-x-2">
                 <Image
-                  src={"/icons/location.svg"}
-                  width={26}
-                  height={26}
+                  src="/icons/location.svg"
+                  width={22}
+                  height={22}
                   alt="delivery"
                 />
                 <p className="text-white text-sm">{order.delivery_location}</p>
               </div>
             </div>
-            <div>
-              <p className="bg-[#E1CCEC] text-sm rounded-lg px-2 py-1 mb-1 font-medium">
+
+            {/* Estimasi Harga */}
+            <div className="flex flex-col items-end gap-y-1">
+              <p className="bg-[#E1CCEC] text-sm rounded-lg px-2 py-1 font-medium text-gray-800">
                 {toRupiah(order.price_estimation)}
               </p>
-              <p className="bg-[#F49BAB] text-sm rounded-lg px-2 py-1 font-medium">
+              <p className="bg-[#F49BAB] text-sm rounded-lg px-2 py-1 font-medium text-gray-800">
                 {toRupiah(order.delivery_fee)}
               </p>
             </div>
           </div>
-          <div className="flex p-2 justify-between">
-            <div className="flex gap-x-2 flex-5">
+
+          {/* 🔸 Bagian Bawah: Profil & Deskripsi */}
+          <div className="flex justify-between items-start p-2">
+            {/* Profil Stuker */}
+            <div className="flex items-center gap-x-2 flex-1">
               <Image
                 src={order.stuker_image}
                 alt="stuker profile"
@@ -78,12 +101,16 @@ export default function OrderCardStuker({
                 className="rounded-full"
               />
               <div>
-                <p className="text-md font-medium">{order.stuker_name}</p>
-                <p className="text-sm">Customer</p>
+                <p className="text-md font-medium">
+                  {limitText(order.stuker_name, 8)}
+                </p>
+                <p className="text-sm text-gray-600">Customer</p>
               </div>
             </div>
-            <div className="flex text-sm text-gray-600 overflow-hidden h-11 flex-5 justify-start  border-l-1 pl-1">
-              <p className="w-[100%] text-black text-md">
+
+            {/* Deskripsi Pesanan */}
+            <div className="flex-1 border-l pl-2 text-sm text-gray-700 max-h-11 overflow-hidden">
+              <p className="text-black text-md leading-snug break-words">
                 {order.order_description}
               </p>
             </div>

@@ -1,19 +1,31 @@
 "use client";
+
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+
+// 🔹 Komponen internal halaman profil
 import HeaderProfilePage from "./HeaderProfilePage";
-import Image from "next/image";
 import PhotoProfileSection from "./PhotoProfileSection";
 import Rating from "./Rating";
-import ProfileField from "./ProfileField";
-import { Lock, User, IdCard, Phone } from "lucide-react";
+
+// 🔹 Komponen utilitas global
 import Button from "@/components/ButtonPrimary";
-import { useRouter } from "next/navigation";
+import ConfirmModalComponent from "@/components/ConfirmationModal";
+import Alert from "@/components/Alert";
+
+import ProfileFieldsSection from "./ProfileFieldsSection";
 
 export default function ProfilePage() {
   const router = useRouter();
 
+  // 🔹 State utama
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
   const [image, setImage] = useState("/images/profilePhoto.png");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 🔹 Data profil pengguna
   const [profile, setProfile] = useState({
     name: "Marip Ramadhan",
     nim: "1237050069",
@@ -21,26 +33,40 @@ export default function ProfilePage() {
     password: "****************",
   });
 
-  // 🔹 Data edit sementara (belum disimpan)
+  // 🔹 Data sementara (belum disimpan)
   const [editedData, setEditedData] = useState(profile);
 
-  // 🔹 Fungsi untuk update value yang diedit
+  // =====================================================
+  // 🔧 HANDLER FUNCTIONS
+  // =====================================================
+
+  // 👉 Update data yang sedang diedit
   const handleFieldChange = (field: keyof typeof profile, value: string) => {
     setEditedData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // 👉 Ganti halaman ke dashboard Stuker
   const handleSwitch = () => {
     router.push("/stuker-dashboard");
   };
-  // 🔹 Fungsi untuk menimpa (simpan perubahan)
+
+  // 👉 Simpan perubahan dan tampilkan alert
   const handleOverride = () => {
     setProfile(editedData);
-    alert("✅ Data profil berhasil ditimpa!");
+    setAlert(true);
+
+    setTimeout(() => {
+      setAlert(false);
+      localStorage.removeItem("saveProfile");
+    }, 4000);
   };
+
+  // 👉 Trigger input file saat foto diklik
   const handleClick = () => {
     fileInputRef.current?.click();
   };
 
+  // 👉 Update foto profil yang dipilih user
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -49,54 +75,65 @@ export default function ProfilePage() {
     }
   };
 
+  // =====================================================
+  // 🔹 RENDER UI
+  // =====================================================
+
   return (
     <div className="px-4 flex flex-col">
+      {/* 🔸 Alert: tampil setelah data ditimpa */}
+      {alert && (
+        <Alert
+          message="Data profil berhasil ditimpa!"
+          localStorageName="saveProfile"
+        />
+      )}
+
+      {/* 🔸 Modal konfirmasi penyimpanan */}
+      <ConfirmModalComponent
+        illustrationUrl="/illustrations/saveProfile.svg"
+        message="apakah kamu yakin ingin menyimpan perubahan?"
+        confirm={() => {
+          handleOverride();
+          setShowModal(false);
+        }}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
+
+      {/* 🔸 Header halaman */}
       <HeaderProfilePage />
+
+      {/* 🔸 Foto profil */}
       <PhotoProfileSection
         handleClick={handleClick}
         handleFileChange={handleFileChange}
         fileInputRef={fileInputRef}
         imageUrl={image}
       />
+
+      {/* 🔸 Rating pengguna */}
       <Rating rating={35} reviews={40} />
-      <ProfileField
-        label="Nama pengguna"
-        icon={<User size={20} />}
-        value={editedData.name}
-        editable
-        onChange={(v) => handleFieldChange("name", v)}
+
+      {/* 🔸 Bidang data profil */}
+      <ProfileFieldsSection
+        editedData={editedData}
+        onFieldChange={handleFieldChange}
       />
-      <ProfileField
-        label="NIM"
-        icon={<IdCard size={20} />}
-        value={editedData.nim}
-      />
-      <ProfileField
-        label="Nomor telepon"
-        icon={<Phone size={20} />}
-        value={editedData.phone}
-        editable
-        onChange={(v) => handleFieldChange("phone", v)}
-      />
-      <ProfileField
-        label="Kata sandi"
-        icon={<Lock size={20} />}
-        value={editedData.password}
-        editable
-        onChange={(v) => handleFieldChange("password", v)}
-      />
+
+      {/* 🔸 Aksi tombol bawah */}
       <div className="flex gap-x-2">
-        <div className="flex flex-2">
+        <div className="flex flex-3">
           <Button
             label="Beralih ke Stuker"
             className="text-md rounded-lg py-3"
             onClick={handleSwitch}
           />
         </div>
-        <div className="flex-3">
+        <div className="flex-4">
           <Button
             label="Simpan Perubahan"
-            onClick={handleOverride}
+            onClick={() => setShowModal(true)}
             className="text-md rounded-lg py-3"
           />
         </div>

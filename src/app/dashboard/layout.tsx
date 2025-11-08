@@ -1,10 +1,14 @@
 import Image from "next/image";
 import BottomNav from "./BottomNav";
 
-export default function LoginPage({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className=" w-[100%] h-[100vh] relative">
-      <div className="h-[100vh] overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pb-[11vh]">
+    <div className=" w-[100%] relative">
+      <div className="h-[100dvh] overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
         {children}
       </div>
       <BottomNav />

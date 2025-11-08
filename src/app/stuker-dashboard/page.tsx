@@ -1,6 +1,23 @@
+"use client";
 import Image from "next/image";
 import OrderCardStuker from "./OrderCardStuker";
+import OrderDetailComponent from "./OrderDetailComponent";
+import { useEffect, useState } from "react";
+
 export default function StukerDashboard() {
+  // Mencegah back kehalaman sebelumnya
+  useEffect(() => {
+    // ✅ Hapus halaman sebelumnya dari history
+    history.pushState(null, "", location.href);
+    window.onpopstate = () => {
+      history.pushState(null, "", location.href);
+    };
+
+    // 🧹 Bersihkan event listener saat unmount
+    return () => {
+      window.onpopstate = null;
+    };
+  }, []);
   const activeOrders = [
     {
       order_id: "001",
@@ -78,13 +95,22 @@ export default function StukerDashboard() {
       stuker_image: "/images/profilePhoto.png",
     },
   ];
+  const [orderDetailVisibility, setOrderDetailVisibility] =
+    useState<boolean>(false);
   return (
-    <div className="w-[100%] px-4 flex pt-8 flex-col">
+    <div className="w-[100%] px-4 flex pt-8 flex-col relative overflow-y-hidden pb-[11vh]">
       <div className="flex mb-1 justify-end pr-1">
         <h1>Pesanan Tersedia</h1>
         <Image width={26} height={26} alt="List" src={"/icons/list-menu.svg"} />
       </div>
-      <OrderCardStuker activeOrders={activeOrders} />
+      <OrderDetailComponent
+        orderDetailVisibility={orderDetailVisibility}
+        setOrderDetailVisibility={setOrderDetailVisibility}
+      />
+      <OrderCardStuker
+        activeOrders={activeOrders}
+        setOrderDetailVisibility={setOrderDetailVisibility}
+      />
     </div>
   );
 }

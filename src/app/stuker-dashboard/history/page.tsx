@@ -80,9 +80,19 @@ export default function HistoryPage() {
   ];
 
   return (
-    <div className="pt-4 px-2 flex flex-col gap-y-2">
+    <div className="pt-4 px-2 flex flex-col gap-y-2 pb-[11vh]">
       <h1 className="text-primary font-medium text-xl">Riwayat Pesanan</h1>
-      <OrderCard orderHistory={orderHistory} />
+
+      {orderHistory && orderHistory.length > 0 ? (
+        <OrderCard orderHistory={orderHistory} />
+      ) : (
+        <div className="flex flex-col items-center justify-center h-[70vh] text-gray-500">
+          <p className="text-center font-medium text-lg">Belum ada pesanan</p>
+          <p className="text-center text-md text-gray-400 mt-1">
+            Ayo buat pesanan pertamamu!
+          </p>
+        </div>
+      )}
     </div>
   );
 }

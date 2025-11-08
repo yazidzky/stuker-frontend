@@ -1,10 +1,13 @@
 "use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ButtonPrimary from "@/components/ButtonPrimary";
 import InputAuth from "@/components/InputAuth";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     nim: "",
     username: "",
@@ -12,24 +15,33 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
   });
-  const router = useRouter();
 
+  // 👉 Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = () => {
+  // 👉 Handle submit (Enter / Button)
+  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault(); // biar gak reload browser
     router.push("/dashboard");
   };
 
+  // 👉 Switch to Login page
   const handleSwitchPage = () => {
     router.push("/auth");
   };
+
   return (
-    <div className=" h-[80vh] flex flex-col justify-between py-5 px-6 border-t border-gray-300 ">
+    <form
+      onSubmit={handleSubmit}
+      className="h-[80dvh] flex flex-col justify-between py-5 px-6 border-t border-gray-300"
+    >
+      {/* ================= Header & Form Fields ================= */}
       <div>
         <h1 className="font-sans text-4xl font-semibold mb-5">Daftar</h1>
+
         <InputAuth
           label="NIM"
           name="nim"
@@ -38,6 +50,7 @@ export default function RegisterPage() {
           value={formData.nim}
           onChange={handleChange}
         />
+
         <InputAuth
           label="Nama Pengguna"
           name="username"
@@ -46,6 +59,7 @@ export default function RegisterPage() {
           value={formData.username}
           onChange={handleChange}
         />
+
         <InputAuth
           label="Nomor Telepon"
           name="phoneNumber"
@@ -54,6 +68,7 @@ export default function RegisterPage() {
           value={formData.phoneNumber}
           onChange={handleChange}
         />
+
         <InputAuth
           label="Kata Sandi"
           name="password"
@@ -62,27 +77,31 @@ export default function RegisterPage() {
           value={formData.password}
           onChange={handleChange}
         />
+
         <InputAuth
           label="Konfirmasi Kata Sandi"
           name="confirmPassword"
           type="password"
           placeholder="Masukan ulang kata sandi"
-          value={formData.password}
+          value={formData.confirmPassword}
           onChange={handleChange}
         />
       </div>
+
+      {/* ================= Button & Page Switch ================= */}
       <div>
-        <ButtonPrimary label="Daftar" onClick={handleSubmit} />
+        <ButtonPrimary label="Daftar" type="submit" onClick={() => {}} />
+
         <div className="flex justify-center mt-2 gap-x-2">
           <p>Sudah Punya Akun?</p>
           <p
-            className="font-medium text-primary cursor-pointer active:opacity-20"
             onClick={handleSwitchPage}
+            className="font-medium text-primary cursor-pointer active:opacity-20"
           >
             Login
           </p>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

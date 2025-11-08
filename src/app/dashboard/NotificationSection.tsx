@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export default function NotificationSection({
   notifications,
 }: {
@@ -18,6 +20,19 @@ export default function NotificationSection({
       year: "numeric",
     });
   };
+
+  useEffect(() => {
+    // ✅ Hapus halaman sebelumnya dari history
+    history.pushState(null, "", location.href);
+    window.onpopstate = () => {
+      history.pushState(null, "", location.href);
+    };
+
+    // 🧹 Bersihkan event listener saat unmount
+    return () => {
+      window.onpopstate = null;
+    };
+  }, []);
   return (
     <div className="mt-3 gap-y-2 flex flex-col">
       <h1 className=" text-primary text-xl font-medium">Pemberitahuan</h1>

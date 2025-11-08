@@ -1,12 +1,29 @@
+"use client";
+import { useEffect } from "react";
 import ActionCard from "./ActionCard";
 import Header from "./Header";
 import NotificationSection from "./NotificationSection";
 import WellcomeText from "./WellcomeText";
-export default function Dashboard() {
+export default function DashboardPage() {
   const data = {
     imgUrl: "/images/profilePhoto.png",
-    username: "Marip",
+    username: "Marip Ramadan ",
   };
+
+  // Mencegah back kehalaman sebelumnya
+  useEffect(() => {
+    // ✅ Hapus halaman sebelumnya dari history
+    history.pushState(null, "", location.href);
+    window.onpopstate = () => {
+      history.pushState(null, "", location.href);
+    };
+
+    // 🧹 Bersihkan event listener saat unmount
+    return () => {
+      window.onpopstate = null;
+    };
+  }, []);
+
   const notifications = [
     {
       notification_id: "NTF001",
@@ -35,7 +52,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="w-[100%]  px-4">
+    <div className="w-[100%] px-4  pb-[11vh]">
       <Header imgUrl={data.imgUrl} />
       <WellcomeText username={data.username} />
       <ActionCard />

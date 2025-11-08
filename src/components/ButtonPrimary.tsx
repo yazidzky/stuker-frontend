@@ -18,8 +18,7 @@ export default function Button({
       {...props}
       onClick={onClick}
       className={twMerge(
-        `
-        w-full py-3 rounded-2xl font-semibold text-lg text-white text-center 
+        `w-full py-3 rounded-2xl font-semibold text-lg text-white text-center 
         transition-all duration-200 bg-primary hover:bg-primary/70 
         active:scale-[0.98] shadow-md hover:shadow-lg active:shadow-sm 
         active:opacity-10 cursor-pointer font-sans`,

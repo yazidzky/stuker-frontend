@@ -28,7 +28,7 @@ export default function BottomNav() {
     },
   ];
   return (
-    <nav className="absolute bottom-0 h-[10vh] w-[100%] border-t border-gray-300 rounded-t-2xl flex items-center justify-around px-0 sm:px-8  bg-white">
+    <nav className="fixed bottom-0 h-[10vh] w-[100%] border-t border-gray-300 rounded-t-2xl flex items-center justify-around px-0 sm:px-8  bg-white max-w-112">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (

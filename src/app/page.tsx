@@ -10,7 +10,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100vh] flex flex-col justify-between py-8 pt-36">
+    <div className="h-[100dvh] flex flex-col justify-between py-8 pt-36">
       <div className="flex justify-center">
         <Image src={"/stuker-logo.svg"} alt="Logo" width={120} height={120} />
       </div>
